@@ -200,7 +200,7 @@ class PageController extends Controller
             $this->users[$username]['password'] === $password
             ) {
                 $dataLogin->session()->put('username', $username);
-                return redirect()->route('dashboard.tampil', compact('username'));
+                return redirect()->route('dashboard.tampil', ['username' => $username]);
             } else {
                 return back()->withErrors(['login' => 'Username atau password salah.']);
             }
