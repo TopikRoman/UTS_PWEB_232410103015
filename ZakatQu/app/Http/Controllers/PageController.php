@@ -155,13 +155,19 @@ class PageController extends Controller
     {
         $namaUser = $data->query('username', $data->session()->get('username', 'pengunjung'));
 
-        $jumlahZakat = session('dataZakat', []);
+        if ($data->session()->has('dataZakat')) {
+            $dataZakat = $data->session()->get('dataZakat');
+        } elseif ($data->has('dataZakat')) {
+            $dataZakat = $data->get('dataZakat');
+        } else {
+            $dataZakat = [];
+        }
 
         $totalBeras = 0;
         $totalUang = 0;
         $totalEmas = 0;
 
-        foreach ($jumlahZakat as $zakat) {
+        foreach ($dataZakat as $zakat) {
             $totalBeras += $zakat['jumlah']['beras'];
             $totalUang  += $zakat['jumlah']['uang'];
             $totalEmas  += $zakat['jumlah']['emas'];
