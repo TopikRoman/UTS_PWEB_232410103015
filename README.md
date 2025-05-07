@@ -22,7 +22,7 @@ Profil
 
 - Tampilan data user
 
-Teknologi yang Digunakan
+# Teknologi yang Digunakan
 
 - Laravel - Backend dan logika aplikasi
 
