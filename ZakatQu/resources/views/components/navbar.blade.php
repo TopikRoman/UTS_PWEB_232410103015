@@ -34,13 +34,25 @@
             >
                 @if(session()->has('username'))
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('dashboard.tampil' , ['username'=>request('username')])}}">Dashboard</a>
+                    <a
+                        class="nav-link"
+                        href="{{ route('dashboard.tampil' , ['username'=>request('username')])}}"
+                        >Dashboard</a
+                    >
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('data.tampil' , ['username'=>request('username')])  }}">Pengelolaan</a>
+                    <a
+                        class="nav-link"
+                        href="{{ route('data.tampil' , ['username'=>request('username')])  }}"
+                        >Pengelolaan</a
+                    >
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('profile.tampil', ['username'=>request('username')]) }}">Profile</a>
+                    <a
+                        class="nav-link"
+                        href="{{ route('profile.tampil', ['username'=>request('username')]) }}"
+                        >Profile</a
+                    >
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('logout.Submit') }}"

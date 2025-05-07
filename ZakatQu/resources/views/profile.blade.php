@@ -11,7 +11,10 @@
             <ul class="list-group list-group-flush">
                 <li class="list-group-item d-flex align-items-center">
                     <i class="fa-solid fa-user me-3 text-primary"></i>
-                    <span><strong>Username:</strong> {{ $_GET['username'] }}</span>
+                    <span
+                        ><strong>Username:</strong> {{ $_GET['username']
+                        }}</span
+                    >
                 </li>
                 <li class="list-group-item d-flex align-items-center">
                     <i class="fa-solid fa-venus-mars me-3 text-primary"></i>
@@ -35,7 +38,6 @@
                     @csrf
                     <button type="submit" class="btn btn-danger">Logout</button>
                 </form>
-
             </div>
         </div>
     </div>
@@ -51,4 +53,3 @@
 </style>
 
 @endsection
-

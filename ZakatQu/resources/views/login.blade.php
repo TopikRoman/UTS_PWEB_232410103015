@@ -65,15 +65,13 @@
     </div>
 </div>
 
-
 <style>
-
     .button-submit {
         color: white !important;
     }
 
     .button-submit {
-        background: linear-gradient(90deg, #00A850, #A2BA44);
+        background: linear-gradient(90deg, #00a850, #a2ba44);
         transition: background 0.5s ease;
     }
 

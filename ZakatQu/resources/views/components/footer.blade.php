@@ -28,7 +28,6 @@
     </div>
 </footer>
 
-
 <style>
     .custom-footer {
         background: linear-gradient(90deg, #00a850, #a2ba44);
