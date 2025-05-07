@@ -53,7 +53,7 @@
                         <div class="d-grid">
                             <button
                                 type="submit"
-                                class="btn button text-white fw-bold"
+                                class="button-submit btn button text-white fw-bold"
                             >
                                 Submit
                             </button>
@@ -67,9 +67,20 @@
 
 
 <style>
-  .button {
-    background: linear-gradient(90deg, #00A850, #A2BA44);
-    transition: background 0.5s ease;
-  }
+
+    .button-submit {
+        color: white !important;
+    }
+
+    .button-submit {
+        background: linear-gradient(90deg, #00A850, #A2BA44);
+        transition: background 0.5s ease;
+    }
+
+    .button-submit:hover {
+        transform: scale(1.03);
+        text-shadow: 0px 2px 6px rgba(0, 0, 0, 0.3);
+        transition: all 0.3s ease;
+    }
 </style>
 @endsection

@@ -20,3 +20,4 @@ Route::get('/logout', [\App\Http\Controllers\PageController::class, 'logoutSubmi
 Route::get('/profile', [\App\Http\Controllers\PageController::class, 'tampilkanProfile'])->name('profile.tampil');
 Route::get('/pengelolaan', [\App\Http\Controllers\PageController::class, 'tampilkanData'])->name('data.tampil');
 Route::post('/hapus', [\App\Http\Controllers\PageController::class, 'hapusData'])->name('data.hapus');
+Route::post('/tambah', [\App\Http\Controllers\PageController::class, 'tambahData'])->name('data.tambah');

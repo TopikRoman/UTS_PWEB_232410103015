@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 
 class PageController extends Controller
 {
@@ -148,37 +149,38 @@ class PageController extends Controller
         ],
     ];
 
-    public function tampilkanData()
-    {
-        if (!session()->has('dataZakat')) {
-            session(['dataZakat' => $this->dataZakat]);
-        }
+    // Tentang perdashboardan
 
-        return view('pengelolaan', ['data' => session('dataZakat')]);
-    }
-
-    public function tampilkanDashboard(Request $request)
+    public function tampilkanDashboard(Request $data)
     {
+        $namaUser = $data->query('username', $data->session()->get('username', 'pengunjung'));
+
+        $jumlahZakat = session('dataZakat', []);
+
         $totalBeras = 0;
         $totalUang = 0;
         $totalEmas = 0;
 
-        foreach ($this->dataZakat as $zakat) {
+        foreach ($jumlahZakat as $zakat) {
             $totalBeras += $zakat['jumlah']['beras'];
             $totalUang  += $zakat['jumlah']['uang'];
             $totalEmas  += $zakat['jumlah']['emas'];
         }
 
-        $username = $request->session()->get('username', 'Pengunjung');
-        return view('dashboard', compact('username', 'totalBeras', 'totalUang', 'totalEmas'));
+        return view('dashboard', compact('namaUser', 'totalBeras', 'totalUang', 'totalEmas'));
     }
 
-    public function tampilkanLogin(){
+
+    // Tentang perakunan
+
+    public function tampilkanLogin()
+    {
         return view('login');
     }
 
-    public function tampilkanProfile(Request $request){
-        $username = $request->session()->get('username');
+    public function tampilkanProfile(Request $dataProfileuser)
+    {
+        $username = $dataProfileuser->query('username', $dataProfileuser->session()->get('username', 'pengunjung'));
         $gender = 'tidak diketahui';
 
         if ($username && isset($this->users[$username])) {
@@ -188,31 +190,47 @@ class PageController extends Controller
         return view('profile', compact('username', 'gender'));
     }
 
-    public function loginSubmit(Request $request)
+    public function loginSubmit(Request $dataLogin)
     {
-        $username = $request->input('username');
-        $password = $request->input('password');
+        $username = $dataLogin->input('username');
+        $password = $dataLogin->input('password');
 
         if (
             isset($this->users[$username]) &&
             $this->users[$username]['password'] === $password
-        ) {
-            $request->session()->put('username', $username);
-            return redirect()->route('dashboard.tampil', compact('username'));
-        } else {
-            return back()->withErrors(['login' => 'Username atau password salah.']);
-        }
+            ) {
+                $dataLogin->session()->put('username', $username);
+                return redirect()->route('dashboard.tampil', compact('username'));
+            } else {
+                return back()->withErrors(['login' => 'Username atau password salah.']);
+            }
     }
 
-    public function logoutSubmit(Request $request)
+    public function logoutSubmit(Request $dataLogin)
     {
-        $request->session()->forget('username');
+        $dataLogin->session()->forget('username');
         return redirect()->route('dashboard.tampil');
     }
 
-    public function hapusData(Request $request)
+    // Tentang perdataan (CRD)
+
+    public function tampilkanData(Request $penerimaanZakat)
     {
-        $nama = $request->input('nama');
+        if (!session()->has('dataZakat')) {
+            session(['dataZakat' => $this->dataZakat]);
+        }
+
+        $data = session('dataZakat', []);
+
+        $parameterQuery = $penerimaanZakat->query();
+
+        return view('pengelolaan', ['data' => $data, 'parameterQuery' => $parameterQuery]);
+    }
+
+
+    public function hapusData(Request $dataAkandihapus)
+    {
+        $nama = $dataAkandihapus->input('nama');
         $dataZakat = session('dataZakat', []);
 
         $index = array_search($nama, array_column($dataZakat, 'nama'));
@@ -223,8 +241,44 @@ class PageController extends Controller
             session(['dataZakat' => $dataZakat]);
         }
 
-        return redirect()->route('data.tampil')->with('success', 'Data berhasil dihapus');
+        $queryParameter = $dataAkandihapus->query();
+        return redirect()->route('data.tampil', $queryParameter)->with('success', 'Data berhasil dihapus');
     }
 
 
-}
+    public function tambahData(Request $dataBaru)
+    {
+        $nama = $dataBaru->input('nama');
+        $gender = $dataBaru->input('gender');
+        $jenis = $dataBaru->input('jenis');
+        $bentuk = $dataBaru->input('bentuk');
+        $jumlah = $dataBaru->input('jumlah');
+        $tanggal = Carbon::now()->format('Y-m-d');
+
+        $dataZakat = session('dataZakat', []);
+
+        $jumlahZakat = ['beras' => 0, 'uang' => 0, 'emas' => 0];
+        if ($bentuk === 'Beras') {
+            $jumlahZakat['beras'] = (int) $jumlah;
+        } elseif ($bentuk === 'Uang') {
+            $jumlahZakat['uang'] = (int) $jumlah;
+        } elseif ($bentuk === 'Emas') {
+            $jumlahZakat['emas'] = (int) $jumlah;
+        }
+
+        $dataZakat[] = [
+            'nama' => $nama,
+            'gender' => $gender,
+            'jenis' => $jenis,
+            'bentuk' => $bentuk,
+            'tanggal' => $tanggal,
+            'jumlah' => $jumlahZakat
+        ];
+
+        session(['dataZakat' => $dataZakat]);
+
+        $Qparameter = $dataBaru->query();
+        return redirect()->route('data.tampil', $Qparameter)->with('success', 'Data berhasil ditambahkan');
+    }
+
+    }
